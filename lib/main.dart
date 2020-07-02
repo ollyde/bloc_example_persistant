@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:bloctest/counter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,16 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _logCounter();
-    asyncInit();
-  }
-
-  asyncInit() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    print(directory.path);
-
-    // Timer.periodic(Duration(milliseconds: 1500), (timer) {
-    //   counterBlock.add(CounterEvent.increment);
-    // });
   }
 
   _logCounter() {
@@ -84,7 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      context.bloc<CounterBloc>().add(IncreaseCount(Random().nextInt(10)));
+                      // This will run after the updates. Great for navigation etc.
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        _logCounter();
+                      });
+                      context.bloc<CounterBloc>().add(IncreaseCount(1));
+                      context.bloc<CounterBloc>().add(IncreaseCount(1));
                     },
                     tooltip: 'Increment',
                     child: Icon(Icons.add),
