@@ -84,9 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      // counterBlock.add(CounterEvent.increment);
                       context.bloc<CounterBloc>().add(IncreaseCount(Random().nextInt(10)));
-                      _logCounter();
                     },
                     tooltip: 'Increment',
                     child: Icon(Icons.add),
