@@ -3,13 +3,24 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'counter_bloc.g.dart';
 
+/**
+ * The bloc can be easily accessed anywhere.
+ */
 final counterBlock = CounterBloc();
 
+/**
+ * Note that it is automatically serialized.
+ * Makes it easy to add new fields.
+ */
 @JsonSerializable(nullable: false)
 class CounterState {
   final int total;
 
   CounterState({this.total = 0});
+
+  copy({int total}) {
+    total = total ?? this.total;
+  }
 }
 
 class CounterBloc extends HydratedBloc<dynamic, CounterState> {
@@ -18,8 +29,8 @@ class CounterBloc extends HydratedBloc<dynamic, CounterState> {
   @override
   Stream<CounterState> mapEventToState(dynamic event) async* {
     if (event is IncreaseCount) {
-      print('CounterEvent.increment');
-      yield CounterState(total: state.total + event.total);
+      final currentTotal = counterBlock.state.total;
+      yield counterBlock.state.copy(total: currentTotal + event.add);
       return;
     }
   }
@@ -32,6 +43,6 @@ class CounterBloc extends HydratedBloc<dynamic, CounterState> {
 }
 
 class IncreaseCount {
-  final int total;
-  IncreaseCount(this.total);
+  final int add;
+  IncreaseCount(this.add);
 }
