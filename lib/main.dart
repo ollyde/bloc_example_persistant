@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloctest/counter_bloc.dart';
 import 'package:bloctest/custom_hydrated_bloc_storage.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     /**
      * BlocProvider or MultiBlocProvider is at the root of the app. 
-     * Above Material. We only use the provider once.
+     * Above Material. We only use the provider once in the whole app.
+     * The dependancy injection is the 'BlocBuilder', no passing down.
      */
     return BlocProvider(
       create: (BuildContext context) => counterBlock,
@@ -28,18 +27,14 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(
-          title: 'Flutter Demo Home Page',
-        ),
+        home: MyHomePage(),
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -59,9 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(),
       /**
        * Bloc builder is the dependancy injection.
        * We do not pass blocs down, that is dumb.
@@ -83,10 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 FloatingActionButton(
                   onPressed: () {
                     // This will run after the updates. Great for navigation etc.
+                    // Just an example.
                     SchedulerBinding.instance.addPostFrameCallback((_) {
                       _logCounter();
                     });
-                    context.bloc<CounterBloc>().add(IncreaseCount(1));
+                    // Increase the count by N.
                     context.bloc<CounterBloc>().add(IncreaseCount(1));
                   },
                   tooltip: 'Increment',
