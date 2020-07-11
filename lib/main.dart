@@ -28,7 +28,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(title: 'Flutter Demo Home Page'),
+        home: MyHomePage(
+          title: 'Flutter Demo Home Page',
+        ),
       ),
     );
   }
@@ -51,9 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _logCounter() {
-    Future.delayed(Duration(milliseconds: 100)).then((value) {
-      print('Counter log : ' + counterBlock.state.total.toString());
-    });
+    print('Counter log : ' + counterBlock.state.total.toString());
   }
 
   @override
@@ -63,7 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       /**
-       * Bloc builder is the dependancy injection. We do not pass blocs down, that is dumb.
+       * Bloc builder is the dependancy injection.
+       * We do not pass blocs down, that is dumb.
        */
       body: BlocBuilder<CounterBloc, CounterState>(
         bloc: counterBlock,
